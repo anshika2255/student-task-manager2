@@ -15,9 +15,9 @@ document
     .addEventListener("keypress", function(event) {
 
         if (event.key === "Enter") {
+
             addTask();
         }
-
 });
 
 /* Dark Mode Toggle */
@@ -36,7 +36,6 @@ document
 
             localStorage.setItem("theme", "light");
         }
-
 });
 
 /* Load Saved Theme */
@@ -91,7 +90,7 @@ function addTask() {
     saveTasks();
 }
 
-/* Create Task */
+/* Create Task Element */
 function createTaskElement(
     taskText,
     isCompleted,
@@ -100,6 +99,12 @@ function createTaskElement(
 
     let li =
         document.createElement("li");
+
+    /* Left Side Container */
+    let taskLeft =
+        document.createElement("div");
+
+    taskLeft.classList.add("task-left");
 
     /* Checkbox */
     let checkbox =
@@ -124,6 +129,7 @@ function createTaskElement(
         span.innerText = taskText;
     }
 
+    /* Completed Style */
     if (isCompleted) {
 
         span.classList.add("completed");
@@ -163,7 +169,7 @@ function createTaskElement(
         let updatedTask =
             prompt(
                 "Edit your task:",
-                span.innerText
+                taskText
             );
 
         if (
@@ -171,7 +177,19 @@ function createTaskElement(
             updatedTask.trim() !== ""
         ) {
 
-            span.innerText = updatedTask;
+            if (dueDate !== "") {
+
+                span.innerText =
+                    updatedTask +
+                    " (Due: " + dueDate + ")";
+
+            } else {
+
+                span.innerText =
+                    updatedTask;
+            }
+
+            taskText = updatedTask;
 
             saveTasks();
         }
@@ -199,15 +217,19 @@ function createTaskElement(
         saveTasks();
     };
 
-    /* Add Elements */
-    li.appendChild(checkbox);
+    /* Add Elements to Left Side */
+    taskLeft.appendChild(checkbox);
 
-    li.appendChild(span);
+    taskLeft.appendChild(span);
+
+    /* Add to Main Task Card */
+    li.appendChild(taskLeft);
 
     li.appendChild(editBtn);
 
     li.appendChild(deleteBtn);
 
+    /* Add Task to List */
     document
         .getElementById("taskList")
         .appendChild(li);
@@ -259,10 +281,11 @@ function saveTasks() {
             item.querySelector("input").checked;
 
         tasks.push({
+
             text: text,
+
             completed: completed
         });
-
     });
 
     localStorage.setItem(
@@ -294,7 +317,6 @@ function loadTasks() {
             task.completed,
             ""
         );
-
     });
 }
 
@@ -331,6 +353,5 @@ function filterTasks(type) {
                 ? "flex"
                 : "none";
         }
-
     });
 }
