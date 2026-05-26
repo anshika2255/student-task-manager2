@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 /* Reset */
 * {
@@ -30,7 +30,7 @@ body {
 
     padding: 20px;
 
-    transition: 0.3s;
+    transition: all 0.3s ease;
 }
 
 /* Main Container */
@@ -49,7 +49,9 @@ body {
     box-shadow:
         0 12px 35px rgba(0,0,0,0.12);
 
-    transition: 0.3s;
+    transition: all 0.3s ease;
+
+    animation: fadeIn 0.5s ease;
 }
 
 /* Header */
@@ -101,9 +103,15 @@ input {
 
     font-size: 16px;
 
-    transition: 0.3s;
+    transition: all 0.3s ease;
 
     background: #f9fafc;
+}
+
+/* Placeholder */
+input::placeholder {
+
+    color: #888;
 }
 
 /* Input Focus */
@@ -111,10 +119,10 @@ input:focus {
 
     outline: none;
 
-    border-color: #007bff;
+    border-color: #3b82f6;
 
     box-shadow:
-        0 0 8px rgba(0,123,255,0.25);
+        0 0 8px rgba(59,130,246,0.25);
 }
 
 /* Buttons */
@@ -126,7 +134,11 @@ button {
 
     border-radius: 12px;
 
-    background: #007bff;
+    background: linear-gradient(
+        135deg,
+        #3b82f6,
+        #2563eb
+    );
 
     color: white;
 
@@ -136,15 +148,16 @@ button {
 
     cursor: pointer;
 
-    transition: 0.3s;
+    transition: all 0.3s ease;
 }
 
 /* Button Hover */
 button:hover {
 
-    background: #0056b3;
+    transform: translateY(-3px);
 
-    transform: translateY(-2px);
+    box-shadow:
+        0 8px 18px rgba(37,99,235,0.3);
 }
 
 /* Filters */
@@ -184,6 +197,18 @@ button:hover {
     font-size: 1.5rem;
 
     font-weight: 600;
+
+    line-height: 1.5;
+}
+
+/* Error Message */
+#errorMessage {
+
+    color: red;
+
+    margin-bottom: 12px;
+
+    font-size: 14px;
 }
 
 /* Task List */
@@ -214,19 +239,19 @@ li {
     box-shadow:
         0 4px 10px rgba(0,0,0,0.05);
 
-    transition: 0.3s;
+    transition: all 0.3s ease;
 }
 
-/* Hover Effect */
+/* Task Hover */
 li:hover {
 
-    transform: translateY(-3px);
+    transform: translateY(-5px) scale(1.01);
 
     box-shadow:
         0 10px 20px rgba(0,0,0,0.08);
 }
 
-/* Left Side */
+/* Left Section */
 .task-left {
 
     display: flex;
@@ -258,22 +283,22 @@ li span {
     word-break: break-word;
 }
 
+/* Due Date */
+.due-date {
+
+    font-size: 14px;
+
+    color: #666;
+
+    margin-left: 10px;
+}
+
 /* Completed Task */
 .completed {
 
     text-decoration: line-through;
 
     color: gray;
-}
-
-/* Error Message */
-#errorMessage {
-
-    color: red;
-
-    margin-bottom: 12px;
-
-    font-size: 14px;
 }
 
 /* Dark Mode */
@@ -308,7 +333,13 @@ li span {
     border: 1px solid #4b5563;
 }
 
-/* Dark Stats */
+/* Dark Placeholder */
+.dark-mode input::placeholder {
+
+    color: #cbd5e1;
+}
+
+/* Dark Stats Box */
 .dark-mode .stats-box {
 
     background: #374151;
@@ -320,10 +351,12 @@ li span {
     color: white;
 }
 
-/* Dark Tasks */
+/* Dark Task Cards */
 .dark-mode li {
 
     background: #374151;
+
+    border: 1px solid #4b5563;
 }
 
 /* Dark Task Text */
@@ -332,7 +365,31 @@ li span {
     color: white;
 }
 
-/* Responsive */
+/* Dark Due Date */
+.dark-mode .due-date {
+
+    color: #d1d5db;
+}
+
+/* Fade Animation */
+@keyframes fadeIn {
+
+    from {
+
+        opacity: 0;
+
+        transform: translateY(20px);
+    }
+
+    to {
+
+        opacity: 1;
+
+        transform: translateY(0);
+    }
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
 
     .header {
