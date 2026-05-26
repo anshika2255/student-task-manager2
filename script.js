@@ -7,6 +7,8 @@ window.onload = function () {
     loadTasks();
 
     updateStats();
+
+    loadTheme();
 };
 
 /* Enter Key Support */
@@ -39,12 +41,17 @@ document
 });
 
 /* Load Saved Theme */
-if (localStorage.getItem("theme") === "dark") {
+function loadTheme() {
 
-    document.body.classList.add("dark-mode");
+    if (
+        localStorage.getItem("theme") === "dark"
+    ) {
+
+        document.body.classList.add("dark-mode");
+    }
 }
 
-/* Add Task Function */
+/* Add Task */
 function addTask() {
 
     let taskInput =
@@ -90,7 +97,7 @@ function addTask() {
     saveTasks();
 }
 
-/* Create Task Element */
+/* Create Task Card */
 function createTaskElement(
     taskText,
     isCompleted,
@@ -118,15 +125,18 @@ function createTaskElement(
     let span =
         document.createElement("span");
 
+    span.innerText = taskText;
+
+    /* Due Date */
+    let dueDateSpan =
+        document.createElement("small");
+
+    dueDateSpan.classList.add("due-date");
+
     if (dueDate !== "") {
 
-        span.innerText =
-            taskText +
-            " (Due: " + dueDate + ")";
-
-    } else {
-
-        span.innerText = taskText;
+        dueDateSpan.innerText =
+            "Due: " + dueDate;
     }
 
     /* Completed Style */
@@ -177,19 +187,9 @@ function createTaskElement(
             updatedTask.trim() !== ""
         ) {
 
-            if (dueDate !== "") {
-
-                span.innerText =
-                    updatedTask +
-                    " (Due: " + dueDate + ")";
-
-            } else {
-
-                span.innerText =
-                    updatedTask;
-            }
-
             taskText = updatedTask;
+
+            span.innerText = updatedTask;
 
             saveTasks();
         }
@@ -217,19 +217,20 @@ function createTaskElement(
         saveTasks();
     };
 
-    /* Add Elements to Left Side */
+    /* Add Elements */
     taskLeft.appendChild(checkbox);
 
     taskLeft.appendChild(span);
 
-    /* Add to Main Task Card */
+    taskLeft.appendChild(dueDateSpan);
+
     li.appendChild(taskLeft);
 
     li.appendChild(editBtn);
 
     li.appendChild(deleteBtn);
 
-    /* Add Task to List */
+    /* Add To List */
     document
         .getElementById("taskList")
         .appendChild(li);
@@ -280,11 +281,27 @@ function saveTasks() {
         let completed =
             item.querySelector("input").checked;
 
+        let dueDateElement =
+            item.querySelector(".due-date");
+
+        let dueDate = "";
+
+        if (dueDateElement) {
+
+            dueDate =
+                dueDateElement.innerText.replace(
+                    "Due: ",
+                    ""
+                );
+        }
+
         tasks.push({
 
             text: text,
 
-            completed: completed
+            completed: completed,
+
+            dueDate: dueDate
         });
     });
 
@@ -313,9 +330,12 @@ function loadTasks() {
         totalTasks++;
 
         createTaskElement(
+
             task.text,
+
             task.completed,
-            ""
+
+            task.dueDate
         );
     });
 }
