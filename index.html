@@ -1,20 +1,53 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-  <title>Student Task Manager</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+
+    <!-- Makes website responsive on mobile -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Task Manager</title>
+
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-  <h1>Student Task Manager</h1>
+    <!-- Main Container -->
+    <div class="container">
 
-  <input type="text" id="taskInput" placeholder="Enter a task">
-  <button onclick="addTask()">Add Task</button>
+        <h1>Student Task Manager</h1>
 
-  <h3 id="stats">No tasks added yet</h3>
+        <!-- Input Section -->
+        <div class="input-section">
 
-  <ul id="taskList"></ul>
+            <input 
+                type="text" 
+                id="taskInput" 
+                placeholder="Enter a task"
+            >
 
-  <script src="script.js"></script>
+            <button onclick="addTask()">
+                Add Task
+            </button>
+
+        </div>
+
+        <!-- Error Message -->
+        <p id="errorMessage"></p>
+
+        <!-- Statistics -->
+        <h3 id="stats">
+            No tasks added yet
+        </h3>
+
+        <!-- Task List -->
+        <ul id="taskList"></ul>
+
+    </div>
+
+    <script src="script.js"></script>
+
 </body>
 </html>
