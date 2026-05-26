@@ -1,32 +1,73 @@
 let totalTasks = 0;
 let completedTasks = 0;
 
-/* Load saved tasks when page opens */
+/* Load Tasks When Page Opens */
 window.onload = function () {
+
     loadTasks();
+
+    updateStats();
 };
 
-/* Add task when Enter key is pressed */
-document.getElementById("taskInput").addEventListener("keypress", function(event) {
+/* Enter Key Support */
+document
+    .getElementById("taskInput")
+    .addEventListener("keypress", function(event) {
 
-    if (event.key === "Enter") {
-        addTask();
-    }
+        if (event.key === "Enter") {
+            addTask();
+        }
 
 });
 
+/* Dark Mode Toggle */
+document
+    .getElementById("darkModeBtn")
+    .addEventListener("click", function() {
+
+        document.body.classList.toggle("dark-mode");
+
+        /* Save Theme */
+        if (document.body.classList.contains("dark-mode")) {
+
+            localStorage.setItem("theme", "dark");
+
+        } else {
+
+            localStorage.setItem("theme", "light");
+        }
+
+});
+
+/* Load Saved Theme */
+if (localStorage.getItem("theme") === "dark") {
+
+    document.body.classList.add("dark-mode");
+}
+
+/* Add Task Function */
 function addTask() {
 
-    let taskInput = document.getElementById("taskInput");
+    let taskInput =
+        document.getElementById("taskInput");
 
-    let taskText = taskInput.value.trim();
+    let dueDateInput =
+        document.getElementById("dueDateInput");
 
-    let errorMessage = document.getElementById("errorMessage");
+    let taskText =
+        taskInput.value.trim();
+
+    let dueDate =
+        dueDateInput.value;
+
+    let errorMessage =
+        document.getElementById("errorMessage");
 
     /* Validation */
     if (taskText === "") {
 
-        errorMessage.innerText = "Please enter a task";
+        errorMessage.innerText =
+            "Please enter a task";
 
         return;
     }
@@ -35,9 +76,15 @@ function addTask() {
 
     totalTasks++;
 
-    createTaskElement(taskText, false);
+    createTaskElement(
+        taskText,
+        false,
+        dueDate
+    );
 
     taskInput.value = "";
+
+    dueDateInput.value = "";
 
     updateStats();
 
@@ -45,21 +92,37 @@ function addTask() {
 }
 
 /* Create Task */
-function createTaskElement(taskText, isCompleted) {
+function createTaskElement(
+    taskText,
+    isCompleted,
+    dueDate
+) {
 
-    let li = document.createElement("li");
+    let li =
+        document.createElement("li");
 
     /* Checkbox */
-    let checkbox = document.createElement("input");
+    let checkbox =
+        document.createElement("input");
 
     checkbox.type = "checkbox";
 
     checkbox.checked = isCompleted;
 
     /* Task Text */
-    let span = document.createElement("span");
+    let span =
+        document.createElement("span");
 
-    span.innerText = taskText;
+    if (dueDate !== "") {
+
+        span.innerText =
+            taskText +
+            " (Due: " + dueDate + ")";
+
+    } else {
+
+        span.innerText = taskText;
+    }
 
     if (isCompleted) {
 
@@ -89,14 +152,41 @@ function createTaskElement(taskText, isCompleted) {
         saveTasks();
     };
 
+    /* Edit Button */
+    let editBtn =
+        document.createElement("button");
+
+    editBtn.innerText = "Edit";
+
+    editBtn.onclick = function () {
+
+        let updatedTask =
+            prompt(
+                "Edit your task:",
+                span.innerText
+            );
+
+        if (
+            updatedTask !== null &&
+            updatedTask.trim() !== ""
+        ) {
+
+            span.innerText = updatedTask;
+
+            saveTasks();
+        }
+    };
+
     /* Delete Button */
-    let deleteBtn = document.createElement("button");
+    let deleteBtn =
+        document.createElement("button");
 
     deleteBtn.innerText = "Delete";
 
     deleteBtn.onclick = function () {
 
         if (checkbox.checked) {
+
             completedTasks--;
         }
 
@@ -109,33 +199,41 @@ function createTaskElement(taskText, isCompleted) {
         saveTasks();
     };
 
-    /* Add elements to list */
+    /* Add Elements */
     li.appendChild(checkbox);
 
     li.appendChild(span);
 
+    li.appendChild(editBtn);
+
     li.appendChild(deleteBtn);
 
-    document.getElementById("taskList").appendChild(li);
+    document
+        .getElementById("taskList")
+        .appendChild(li);
 }
 
 /* Update Statistics */
 function updateStats() {
 
-    let stats = document.getElementById("stats");
+    let stats =
+        document.getElementById("stats");
 
     if (totalTasks === 0) {
 
-        stats.innerText = "No tasks added yet";
+        stats.innerText =
+            "No tasks added yet";
 
         return;
     }
 
-    let pendingTasks = totalTasks - completedTasks;
+    let pendingTasks =
+        totalTasks - completedTasks;
 
-    let efficiency = Math.round(
-        (completedTasks / totalTasks) * 100
-    );
+    let efficiency =
+        Math.round(
+            (completedTasks / totalTasks) * 100
+        );
 
     stats.innerText =
         "Total Tasks: " + totalTasks +
@@ -144,16 +242,18 @@ function updateStats() {
         " | Efficiency: " + efficiency + "%";
 }
 
-/* Save tasks in localStorage */
+/* Save Tasks */
 function saveTasks() {
 
     let tasks = [];
 
-    let taskItems = document.querySelectorAll("#taskList li");
+    let taskItems =
+        document.querySelectorAll("#taskList li");
 
     taskItems.forEach(function(item) {
 
-        let text = item.querySelector("span").innerText;
+        let text =
+            item.querySelector("span").innerText;
 
         let completed =
             item.querySelector("input").checked;
@@ -171,17 +271,19 @@ function saveTasks() {
     );
 }
 
-/* Load tasks from localStorage */
+/* Load Tasks */
 function loadTasks() {
 
     let savedTasks =
         localStorage.getItem("tasks");
 
     if (savedTasks === null) {
+
         return;
     }
 
-    let tasks = JSON.parse(savedTasks);
+    let tasks =
+        JSON.parse(savedTasks);
 
     tasks.forEach(function(task) {
 
@@ -189,10 +291,46 @@ function loadTasks() {
 
         createTaskElement(
             task.text,
-            task.completed
+            task.completed,
+            ""
         );
 
     });
+}
 
-    updateStats();
+/* Filter Tasks */
+function filterTasks(type) {
+
+    let tasks =
+        document.querySelectorAll("#taskList li");
+
+    tasks.forEach(function(task) {
+
+        let checkbox =
+            task.querySelector("input");
+
+        if (type === "all") {
+
+            task.style.display = "flex";
+
+        } else if (
+            type === "completed"
+        ) {
+
+            task.style.display =
+                checkbox.checked
+                ? "flex"
+                : "none";
+
+        } else if (
+            type === "pending"
+        ) {
+
+            task.style.display =
+                !checkbox.checked
+                ? "flex"
+                : "none";
+        }
+
+    });
 }
