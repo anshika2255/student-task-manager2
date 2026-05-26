@@ -2,14 +2,16 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
 
-    <!-- Makes website responsive on mobile -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-    <title>Student Task Manager</title>
+    <title>Student Productivity Dashboard</title>
 
     <link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
@@ -17,17 +19,31 @@
     <!-- Main Container -->
     <div class="container">
 
-        <h1>Student Task Manager</h1>
+        <!-- Header -->
+        <div class="header">
+
+            <h1>Student Task Manager</h1>
+
+            <!-- Dark Mode Button -->
+            <button id="darkModeBtn">
+                🌙 Dark Mode
+            </button>
+
+        </div>
 
         <!-- Input Section -->
         <div class="input-section">
 
-            <input 
-                type="text" 
-                id="taskInput" 
-                placeholder="Enter a task"
-            >
+            <!-- Task Input -->
+            <input type="text"
+                   id="taskInput"
+                   placeholder="Enter your task">
 
+            <!-- Due Date -->
+            <input type="date"
+                   id="dueDateInput">
+
+            <!-- Add Task Button -->
             <button onclick="addTask()">
                 Add Task
             </button>
@@ -37,10 +53,31 @@
         <!-- Error Message -->
         <p id="errorMessage"></p>
 
+        <!-- Filter Buttons -->
+        <div class="filters">
+
+            <button onclick="filterTasks('all')">
+                All
+            </button>
+
+            <button onclick="filterTasks('completed')">
+                Completed
+            </button>
+
+            <button onclick="filterTasks('pending')">
+                Pending
+            </button>
+
+        </div>
+
         <!-- Statistics -->
-        <h3 id="stats">
-            No tasks added yet
-        </h3>
+        <div class="stats-box">
+
+            <h3 id="stats">
+                No tasks added yet
+            </h3>
+
+        </div>
 
         <!-- Task List -->
         <ul id="taskList"></ul>
@@ -50,4 +87,5 @@
     <script src="script.js"></script>
 
 </body>
+
 </html>
